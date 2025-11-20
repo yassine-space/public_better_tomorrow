@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جمعية الغد أفضل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.8;
+            color: #1a1a1a;
+            direction: rtl;
+            text-align: right;
+            background: #f5f5f5;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #8e2e2e 100%);
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            flex-direction: row-reverse;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-direction: row-reverse; 
+        }
+
+        .logo-section img {
+            height: 70px;
+            width: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo-section h1 {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .logo-section h1 span {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-direction: row-reverse;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 0.7rem 1.3rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .menu-toggle span {
+            width: 30px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 30%, #922b21 60%, #641e16 100%);
+            padding: 4rem 2rem;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            z-index: 1;
+            max-width: 900px;
+            padding: 3rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.15);
+            padding: 1.5rem 2.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.25);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(to bottom, #ffffff 0%, #fef5f5 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .welcome-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .welcome-content h2 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+
+        .welcome-content p {
+            font-size: 1.4rem;
+            color: #555;
+            line-height: 2;
+        }
+
+        /* Service Section */
+        .service-section {
+            max-width: 1200px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .service-card {
+            background: white;
+            padding: 4rem;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(231, 76, 60, 0.15);
+            max-width: 600px;
+            margin: 0 auto;
+            transition: all 0.4s ease;
+            border: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 60px rgba(231, 76, 60, 0.3);
+            border-color: #e74c3c;
+        }
+
+        .service-icon {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4.5rem;
+            box-shadow: 0 8px 30px rgba(231, 76, 60, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .service-card h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #e74c3c;
+            font-weight: 800;
+        }
+
+        .service-card p {
+            color: #666;
+            line-height: 2;
+            font-size: 1.2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+
+        footer p {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: row-reverse;
+                justify-content: space-between;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            nav {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                left: 0;
+                background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            }
+
+            nav.active {
+                max-height: 300px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+                text-align: center;
+                padding: 1rem 0;
+            }
+
+            nav ul li {
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            nav ul li:last-child {
+                border-bottom: none;
+            }
+
+            nav a {
+                display: block;
+                padding: 1rem;
+            }
+
+            .hero-content h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .welcome-content h2 {
+                font-size: 2rem;
+            }
+
+            .welcome-content p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .service-card {
+                padding: 2.5rem;
+            }
+
+            .service-icon {
+                width: 100px;
+                height: 100px;
+                font-size: 3rem;
+            }
+
+            .service-card h3 {
+                font-size: 1.8rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .stat-item {
+                padding: 1rem 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="navMenu">
+                <ul>
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#about">من نحن</a></li>
+                    <li><a href="#services">خدماتنا</a></li>
+                    <li><a href="#contact">اتصل بنا</a></li>
+                </ul>
+            </nav>
+            <div class="logo-section">
+                <h1>جمعية الغد الافضل<br><span>المكتب البلدي حمام بوغرارة</span></h1>
+                <img src="/static/images/logo.jpg" alt="شعار الجمعية">
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2>معاً نصنع الأمل.. قطرة دم تنقذ حياة</h2>
+            <p>انضم إلينا في رحلة الإنسانية والعطاء، كن بطلاً حقيقياً من خلال التبرع بالدم</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">متبرع</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">20+</span>
+                    <span class="stat-label">حياة تم إنقاذها</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">متاح دائماً</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="welcome-content">
+            <h2>مرحباً بكم في جمعية الغد أفضل</h2>
+            <p>نسعى لبناء مستقبل أفضل من خلال خدمة المجتمع والعمل الإنساني. نؤمن بأن كل قطرة دم يمكن أن تصنع فرقاً كبيراً في حياة إنسان محتاج.</p>
+        </div>
+    </section>
+
+    <!-- Service Section -->
+    <section class="service-section" id="services">
+        <h2 class="section-title">خدماتنا</h2>
+        <div class="service-card" onclick="window.location.href={% url 'donor_form' %}">
+            <div class="service-icon">🩸</div>
+            <h3>التبرع بالدم</h3>
+            <p>خدمة التبرع بالدم المتكاملة التي تربط المتبرعين بالمحتاجين. نوفر بيئة آمنة ومريحة لإجراء التبرع، مع ضمان أعلى معايير السلامة والجودة. تبرعك اليوم قد ينقذ حياة غداً.</p>
+            <a href="{% url 'donor_form' %}" class="cta-button">سجل الآن للتبرع</a>
+        </div>
+    </section>
+
+    <!-- Need Blood Section -->
+    <section class="service-section">
+        <h2 class="section-title">هل تحتاج إلى دم؟</h2>
+        <div class="service-card" style="background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);" onclick="window.location.href='{% url 'patient_form' %}'">
+            <div class="service-icon" style="background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); box-shadow: 0 8px 30px rgba(230, 126, 34, 0.4);">❤️</div>
+            <h3 style="color: #e67e22;">طلب دم عاجل</h3>
+            <p>إذا كنت بحاجة إلى دم عاجل لك أو لأحد أقاربك، سجل طلبك الآن وسنقوم بالتواصل معك في أقرب وقت ممكن. نحن هنا لمساعدتك.</p>
+            <a href="{% url 'patient_form'%}" class="cta-button" style="background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); box-shadow: 0 6px 20px rgba(230, 126, 34, 0.3);">سجل طلب الدم</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 جمعية الغد أفضل. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('navMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            nav.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                const nav = document.getElementById('navMenu');
+                const toggle = document.querySelector('.menu-toggle');
+                nav.classList.remove('active');
+                toggle.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

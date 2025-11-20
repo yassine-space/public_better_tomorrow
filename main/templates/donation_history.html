@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سجل التبرعات - نظام متابعة التبرع بالدم</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #dc3545;
+      --primary-dark: #c82333;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --warning: #ffc107;
+      --info: #17a2b8;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --card-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      font-family: 'Cairo', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .dashboard-header {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--card-shadow);
+      border-right: 6px solid var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-header:hover {
+      box-shadow: var(--card-hover);
+    }
+
+    .stats-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.8rem;
+      margin-bottom: 1.8rem;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      border-top: 4px solid var(--primary);
+      text-align: center;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-hover);
+    }
+
+    .stats-number {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stats-label {
+      font-size: 1rem;
+      color: var(--secondary);
+      font-weight: 500;
+      margin-top: 0.5rem;
+    }
+
+    .donation-card {
+      background: white;
+      border-radius: 18px;
+      padding: 2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      border-right: 4px solid var(--success);
+    }
+
+    .donation-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-hover);
+    }
+
+    .donation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .donation-main-info {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .donation-avatar {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--success) 0%, #1e7e34 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+
+    .donation-title {
+      font-weight: 700;
+      color: #2d3748;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .donation-meta {
+      display: flex;
+      gap: 1.8rem;
+      font-size: 0.95rem;
+      color: var(--secondary);
+      flex-wrap: wrap;
+    }
+
+    .badge-blood {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
+    }
+
+    .badge-date {
+      background: linear-gradient(135deg, var(--info) 0%, #138496 100%);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(23, 162, 184, 0.3);
+    }
+
+    .details-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+      margin-top: 1.5rem;
+    }
+
+    .details-table th {
+      background: linear-gradient(135deg, var(--success) 0%, #1e7e34 100%);
+      color: white;
+      padding: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+
+    .details-table td {
+      padding: 1.2rem;
+      text-align: center;
+      border-bottom: 1px solid #e2e8f0;
+      background: white;
+      font-size: 0.95rem;
+    }
+
+    .info-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      background: #e9ecef;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: var(--secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-weight: 700;
+      color: #2d3748;
+      font-size: 1.15rem;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 4rem;
+      color: var(--secondary);
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .no-data i {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: #e2e8f0;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-nav {
+      border-radius: 12px;
+      padding: 0.9rem 1.8rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-badges {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+      justify-content: center;
+    }
+
+    .filter-badge {
+      background: #e9ecef;
+      color: var(--secondary);
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .filter-badge.active {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
+    }
+
+    .filter-badge:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .btn-action {
+      border: none;
+      border-radius: 10px;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn-pdf {
+      background: linear-gradient(135deg, var(--info) 0%, #138496 100%);
+    }
+
+    .btn-pdf:hover {
+      background: linear-gradient(135deg, #138496 0%, var(--info) 100%);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .donation-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+      }
+      
+      .donation-main-info {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: right;
+      }
+      
+      .details-table {
+        font-size: 0.85rem;
+      }
+      
+      .dashboard-header {
+        padding: 1.8rem;
+      }
+      
+      .donation-card {
+        padding: 1.5rem;
+      }
+      
+      .nav-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-fluid">
+    <!-- Navigation -->
+    <div class="nav-buttons">
+      <a href="{% url 'blood_dashboard' %}" class="btn btn-primary btn-nav">
+        <i class="fas fa-tint"></i> لوحة المتبرعين
+      </a>
+      <a href="{% url 'patient_dashboard' %}" class="btn btn-warning btn-nav">
+        <i class="fas fa-user-injured"></i> لوحة المرضى
+      </a>
+      <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary btn-nav">
+        <i class="fas fa-tachometer-alt"></i> لوحة التحكم الرئيسية
+      </a>
+    </div>
+
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="display-5 fw-bold text-dark mb-3">
+            <i class="fas fa-history text-success me-3"></i>
+            سجل التبرعات
+          </h1>
+          <p class="text-muted mb-0">سجل كامل لجميع عمليات التبرع بالدم</p>
+        </div>
+        <div class="col-md-4">
+          <div class="row text-center">
+            <div class="col-6">
+              <div class="stats-card">
+                <div class="stats-number">{{ donations|length }}</div>
+                <div class="stats-label">إجمالي التبرعات</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stats-card">
+                <div class="stats-number">{{ unique_donors }}</div>
+                <div class="stats-label">متبرع فريد</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date Filters -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="filter-badges justify-content-center">
+          <span class="filter-badge active" data-filter="all">الكل</span>
+          <span class="filter-badge" data-filter="today">اليوم</span>
+          <span class="filter-badge" data-filter="week">هذا الأسبوع</span>
+          <span class="filter-badge" data-filter="month">هذا الشهر</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Donations List -->
+    <div class="row">
+      <div class="col-12">
+        {% for donation in donations %}
+          <div class="donation-card" data-date="{{ donation.donation_date|date:'Y-m-d' }}">
+            <!-- Donation Header -->
+            <div class="donation-header">
+              <div class="donation-main-info">
+                <div class="donation-avatar">
+                  <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <div>
+                  <div class="donation-title">
+                    تبرع من {{ donation.donor.PRENOM }} {{ donation.donor.NOM }} إلى {{ donation.patient.First_name }} {{ donation.patient.Family_name }}
+                  </div>
+                  <div class="donation-meta">
+                    <span><i class="fas fa-calendar me-1"></i> {{ donation.donation_date|date:"Y/m/d" }}</span>
+                    <span><i class="fas fa-clock me-1"></i> {{ donation.donation_date }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex gap-2 align-items-center">
+                <span class="badge-blood">{{ donation.donor.GROUPAGE }}</span>
+                <span class="badge-date">{{ donation.donation_date|date:"Y/m/d" }}</span>
+              </div>
+            </div>
+
+            <!-- Donation Details -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="info-card">
+                  <div class="info-label">المتبرع</div>
+                  <div class="info-value">{{ donation.donor.PRENOM }} {{ donation.donor.NOM }}</div>
+                  <div class="donation-meta mt-2">
+                    <span><i class="fas fa-phone me-1"></i> {{ donation.donor.NUM_TEL|default:"لا يوجد" }}</span>
+                    <span><i class="fas fa-map-marker-alt me-1"></i> {{ donation.donor.RESIDENC|default:"غير محدد" }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-card">
+                  <div class="info-label">المريض</div>
+                  <div class="info-value">{{ donation.patient.First_name }} {{ donation.patient.Family_name }}</div>
+                  <div class="donation-meta mt-2">
+                    <span><i class="fas fa-hospital me-1"></i> {{ donation.patient.hospital_name|default:"غير محدد" }}</span>
+                    <span><i class="fas fa-birthday-cake me-1"></i> {% if donation.patient.age %}{{ donation.patient.age }} سنة{% else %}غير محدد{% endif %}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="details-table">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>معلومات المتبرع</th>
+                    <th>معلومات المريض</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <strong>الاسم:</strong> {{ donation.donor.PRENOM }} {{ donation.donor.NOM }}<br>
+                      <strong>الجنس:</strong> {{ donation.donor.get_SEX_display }}<br>
+                      <strong>الهاتف:</strong> {{ donation.donor.NUM_TEL|default:"غير محدد" }}<br>
+                      <strong>العنوان:</strong> {{ donation.donor.RESIDENC|default:"غير محدد" }}
+                    </td>
+                    <td>
+                      <strong>الاسم:</strong> {{ donation.patient.First_name }} {{ donation.patient.Family_name }}<br>
+                      <strong>الجنس:</strong> {{ donation.patient.get_gender_display }}<br>
+                      <strong>المستشفى:</strong> {{ donation.patient.hospital_name|default:"غير محدد" }}<br>
+                      <strong>العنوان:</strong> {{ donation.patient.adress|default:"غير محدد" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Certificate Button -->
+            <div class="action-buttons">
+              <a href="{% url 'generate_certificate' donation.patient.id donation.donor.id %}" class="btn-action btn-pdf">
+                <i class="fas fa-download"></i> تحميل الشهادة
+              </a>
+            </div>
+          </div>
+        {% empty %}
+          <div class="no-data">
+            <i class="fas fa-history fa-3x mb-3"></i>
+            <h4 class="text-muted">لا توجد تبرعات مسجلة</h4>
+            <p class="text-muted">لم يتم تسجيل أي تبرعات في النظام بعد</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Filter functionality
+    const filterBadges = document.querySelectorAll('.filter-badge');
+    filterBadges.forEach(badge => {
+      badge.addEventListener('click', function() {
+        // Remove active class from all badges
+        filterBadges.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked badge
+        this.classList.add('active');
+        
+        const filter = this.getAttribute('data-filter');
+        filterDonations(filter);
+      });
+    });
+
+    function filterDonations(filter) {
+      const donationCards = document.querySelectorAll('.donation-card');
+      const today = new Date();
+      
+      donationCards.forEach(card => {
+        const donationDate = new Date(card.getAttribute('data-date'));
+        let showCard = true;
+        
+        switch(filter) {
+          case 'today':
+            showCard = donationDate.toDateString() === today.toDateString();
+            break;
+          case 'week':
+            const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            showCard = donationDate >= oneWeekAgo;
+            break;
+          case 'month':
+            const oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+            showCard = donationDate >= oneMonthAgo;
+            break;
+          default:
+            showCard = true;
+        }
+        
+        card.style.display = showCard ? 'block' : 'none';
+      });
+    }
+
+    // Add some sample statistics (you can replace this with actual data from your context)
+    const uniqueDonors = new Set();
+    {% for donation in donations %}
+      uniqueDonors.add('{{ donation.donor.id }}');
+    {% endfor %}
+    
+    // Update unique donors count in the stats card
+    const uniqueDonorsElement = document.querySelector('.stats-card:nth-child(2) .stats-number');
+    if (uniqueDonorsElement) {
+      uniqueDonorsElement.textContent = uniqueDonors.size;
+    }
+  </script>
+</body>
+</html>

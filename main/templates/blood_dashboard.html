@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Donation Admin Dashboard</title>
+
+  <!-- ✅ Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #dc3545;
+      --primary-dark: #c82333;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --light-bg: #f8f9fa;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --card-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .dashboard-header {
+      background: white;
+      border-radius: 18px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--card-shadow);
+      border-left: 6px solid var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-header:hover {
+      box-shadow: var(--card-hover);
+    }
+
+    .stats-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.8rem;
+      margin-bottom: 1.8rem;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      border-top: 4px solid var(--primary);
+      text-align: center;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-hover);
+    }
+
+    .stats-number {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stats-label {
+      font-size: 1rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    .section-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 1.8rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #e2e8f0;
+      position: relative;
+      font-size: 1.4rem;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 80px;
+      height: 3px;
+      background: var(--primary);
+    }
+
+    .donor-card {
+      background: white;
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.2rem;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .donor-card:hover {
+      transform: translateX(5px);
+      box-shadow: var(--card-hover);
+      border-left-color: var(--primary);
+    }
+
+    .donor-card.pending {
+      border-left-color: #ffc107;
+    }
+
+    .donor-card.approved {
+      border-left-color: var(--success);
+    }
+
+    .donor-info {
+      flex: 1;
+    }
+
+    .donor-name {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .donor-meta {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--secondary);
+      flex-wrap: wrap;
+    }
+
+    .badge-blood {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      border: none;
+      border-radius: 10px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .btn-approve {
+      background: linear-gradient(135deg, var(--success) 0%, #1e7e34 100%);
+      color: white;
+    }
+
+    .btn-reject {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      color: white;
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+      color: white;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      color: white;
+    }
+
+    .btn-modifier {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+    }
+    
+    .btn-modifier:hover {
+      background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+      color: white;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 3.5rem;
+      color: var(--secondary);
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .no-data i {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: #e2e8f0;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-nav {
+      border-radius: 12px;
+      padding: 0.9rem 1.8rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Custom modal styling */
+    .modal-content {
+      border-radius: 18px;
+      border: none;
+      box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 18px 18px 0 0;
+      border-bottom: none;
+      padding: 1.8rem;
+    }
+
+    .modal-title {
+      font-weight: 600;
+      color: white;
+      font-size: 1.3rem;
+    }
+
+    .modal-body {
+      padding: 2.2rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      align-items: center;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: 500;
+      color: var(--secondary);
+      font-size: 1rem;
+    }
+
+    .info-value {
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .donor-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+      }
+      
+      .action-buttons {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      
+      .donor-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .nav-buttons {
+        flex-direction: column;
+      }
+      
+      .dashboard-header {
+        padding: 1.8rem;
+      }
+      
+      .stats-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <!-- Navigation -->
+    <div class="nav-buttons">
+      <a href="{% url 'patient_dashboard' %}" class="btn btn-primary btn-nav">
+        <i class="fas fa-user-injured"></i>
+        Patient Dashboard
+      </a>
+      <a href="{% url 'donation_history' %}" class="btn btn-primary btn-nav" >
+        <i class="fas fa-history"></i>
+        Donation history
+      </a>
+      <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-nav">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+      </a>
+    </div>
+
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="display-5 fw-bold text-dark mb-3">
+            <i class="fas fa-tint text-danger me-3"></i>
+            Blood Donation Management
+          </h1>
+          <p class="text-muted mb-0">Manage donor applications and approved donors in one place</p>
+        </div>
+        <div class="col-md-4">
+          <div class="row text-center">
+            <div class="col-6">
+              <div class="stats-card">
+                <div class="stats-number">{{ pending_donors.count }}</div>
+                <div class="stats-label">Pending Review</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stats-card">
+                <div class="stats-number">{{ approved_donors.count }}</div>
+                <div class="stats-label">Approved Donors</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <!-- Pending Donors Section -->
+        <div class="mb-5">
+          <h3 class="section-title">
+            <i class="fas fa-clock text-warning me-2"></i>
+            Pending Donors
+          </h3>
+          
+          {% if pending_donors %}
+            {% for donor in pending_donors %}
+              <div class="donor-card pending"
+                   data-bs-toggle="modal"
+                   data-bs-target="#donorModal"
+                   data-first="{{ donor.PRENOM }}"
+                   data-family="{{ donor.NOM }}"
+                   data-blood="{{ donor.GROUPAGE }}"
+                   data-phone="{% if donor.NUM_TEL %}{{ donor.NUM_TEL }}{% else %}N/A{% endif %}"
+                   data-age="{% if donor.DATE_N %}{{ donor.DATE_N|date:'M d, Y' }}{% else %}N/A{% endif %}"
+                   data-city="{% if donor.RESIDENC %}{{ donor.RESIDENC }}{% else %}N/A{% endif %}">
+                <div class="donor-info">
+                  <div class="donor-name">{{ donor.PRENOM }} {{ donor.NOM }}</div>
+                  <div class="donor-meta">
+                    <span><i class="fas fa-phone me-1"></i> {% if donor.NUM_TEL %}{{ donor.NUM_TEL }}{% else %}No phone{% endif %}</span>
+                    <span><i class="fas fa-map-marker-alt me-1"></i> {% if donor.RESIDENC %}{{ donor.RESIDENC|truncatewords:3 }}{% else %}No address{% endif %}</span>
+                    <span><i class="fas fa-calendar me-1"></i> {% if donor.DATE_N %}{{ donor.DATE_N|date:'M d, Y' }}{% else %}No date{% endif %}</span>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="badge-blood">{{ donor.GROUPAGE }}</span>
+                  <div class="action-buttons">
+                    <a href="{% url 'approve_donor' donor.id %}" class="btn btn-approve btn-action">
+                      <i class="fas fa-check"></i> Approve
+                    </a>
+                    <a href="{% url 'modifier_donor' donor.id %}" class="btn btn-modifier btn-action">
+                      <i class="fas fa-edit"></i> Modifier
+                    </a>
+                    <a href="{% url 'reject_donor' donor.id %}" class="btn btn-reject btn-action">
+                      <i class="fas fa-times"></i> Reject
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="no-data">
+              <i class="fas fa-users-slash"></i>
+              <h4 class="text-muted">No Pending Donors</h4>
+              <p class="text-muted">All donor applications have been processed.</p>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Approved Donors Section -->
+        <div class="mb-5">
+          <h3 class="section-title">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            Approved Donors
+          </h3>
+          
+          {% if approved_donors %}
+            {% for donor in approved_donors %}
+              <div class="donor-card approved"
+                   data-bs-toggle="modal"
+                   data-bs-target="#donorModal"
+                   data-first="{{ donor.PRENOM }}"
+                   data-family="{{ donor.NOM }}"
+                   data-blood="{{ donor.GROUPAGE }}"
+                   data-phone="{% if donor.NUM_TEL %}{{ donor.NUM_TEL }}{% else %}N/A{% endif %}"
+                   data-age="{% if donor.DATE_N %}{{ donor.DATE_N|date:'M d, Y' }}{% else %}N/A{% endif %}"
+                   data-city="{% if donor.RESIDENC %}{{ donor.RESIDENC }}{% else %}N/A{% endif %}">
+                <div class="donor-info">
+                  <div class="donor-name">{{ donor.PRENOM }} {{ donor.NOM }}</div>
+                  <div class="donor-meta">
+                    <span><i class="fas fa-phone me-1"></i> {% if donor.NUM_TEL %}{{ donor.NUM_TEL }}{% else %}No phone{% endif %}</span>
+                    <span><i class="fas fa-map-marker-alt me-1"></i> {% if donor.RESIDENC %}{{ donor.RESIDENC|truncatewords:3 }}{% else %}No address{% endif %}</span>
+                    <span><i class="fas fa-calendar me-1"></i> {% if donor.DATE_DERNIER_DON %}Last donation: {{ donor.DATE_DERNIER_DON|date:'M d, Y' }}{% else %}Never donated{% endif %}</span>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="badge-blood">{{ donor.GROUPAGE }}</span>
+                  <div class="action-buttons">
+                    <a href="{% url 'reject_donor' donor.id %}"
+                       class="btn btn-delete btn-action"
+                       onclick="return confirm('Are you sure you want to delete {{ donor.PRENOM }} {{ donor.NOM }}? This action cannot be undone.');">
+                      <i class="fas fa-trash"></i> Delete
+                    </a>
+                    <a href="{% url 'modifier_donor' donor.id %}" class="btn btn-modifier btn-action">
+                      <i class="fas fa-edit"></i> Modifier
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+          
+            <div class="no-data">
+              <i class="fas fa-user-plus"></i>
+              <h4 class="text-muted">No Approved Donors</h4>
+              <p class="text-muted">Approve some donors to see them here.</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Donor Info Modal -->
+  <div class="modal fade" id="donorModal" tabindex="-1" aria-labelledby="donorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="donorModalLabel">
+            <i class="fas fa-user-circle me-2"></i>
+            Donor Details
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="info-row">
+            <span class="info-label">First Name:</span>
+            <span class="info-value" id="modalFirst"></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Family Name:</span>
+            <span class="info-value" id="modalFamily"></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Blood Type:</span>
+            <span class="info-value" id="modalBlood"></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">date of birth:</span>
+            <span class="info-value" id="modalAge"></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Address:</span>
+            <span class="info-value" id="modalCity"></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Phone:</span>
+            <span class="info-value" id="modalPhone"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // When a donor card is clicked, fill the modal with donor data
+    const donorModal = document.getElementById('donorModal');
+    donorModal.addEventListener('show.bs.modal', event => {
+      const card = event.relatedTarget;
+      document.getElementById('modalFirst').textContent = card.getAttribute('data-first') || 'N/A';
+      document.getElementById('modalFamily').textContent = card.getAttribute('data-family') || 'N/A';
+      document.getElementById('modalBlood').textContent = card.getAttribute('data-blood') || 'N/A';
+      document.getElementById('modalAge').textContent = card.getAttribute('data-age') || 'N/A';
+      document.getElementById('modalCity').textContent = card.getAttribute('data-city') || 'N/A';
+      document.getElementById('modalPhone').textContent = card.getAttribute('data-phone') || 'N/A';
+    });
+  </script>
+</body>
+</html>

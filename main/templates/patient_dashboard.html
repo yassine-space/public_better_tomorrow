@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة المرضى - نظام متابعة التبرع بالدم</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #dc3545;
+      --primary-dark: #c82333;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --warning: #ffc107;
+      --info: #17a2b8;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --card-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      font-family: 'Cairo', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .dashboard-header {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--card-shadow);
+      border-right: 6px solid var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-header:hover {
+      box-shadow: var(--card-hover);
+    }
+
+    .stats-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.8rem;
+      margin-bottom: 1.8rem;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      border-top: 4px solid var(--primary);
+      text-align: center;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-hover);
+    }
+
+    .stats-number {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stats-label {
+      font-size: 1rem;
+      color: var(--secondary);
+      font-weight: 500;
+      margin-top: 0.5rem;
+    }
+
+    .patient-card {
+      background: white;
+      border-radius: 18px;
+      padding: 2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      border-right: 4px solid var(--warning);
+    }
+
+    .patient-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-hover);
+    }
+
+    .patient-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .patient-main-info {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .patient-avatar {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    }
+
+    .patient-name {
+      font-weight: 700;
+      color: #2d3748;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .patient-name:hover {
+      color: var(--primary);
+    }
+
+    .patient-meta {
+      display: flex;
+      gap: 1.8rem;
+      font-size: 0.95rem;
+      color: var(--secondary);
+      flex-wrap: wrap;
+    }
+
+    .badge-blood {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
+    }
+
+    .donor-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+      margin-top: 1.5rem;
+    }
+
+    .donor-table th {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+
+    .donor-table td {
+      padding: 1.2rem;
+      text-align: center;
+      border-bottom: 1px solid #e2e8f0;
+      background: white;
+      font-size: 0.95rem;
+    }
+
+    .btn-action {
+      border: none;
+      border-radius: 10px;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn-pdf {
+      background: linear-gradient(135deg, var(--info) 0%, #138496 100%);
+    }
+
+    .btn-receive {
+      background: linear-gradient(135deg, var(--success) 0%, #1e7e34 100%);
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      color: white;
+    }
+
+    .btn-reject {
+      background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+      color: white;
+    }
+    
+    .btn-reject:hover {
+      background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+      color: white;
+    }
+
+    .btn-modifier {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+    }
+    
+    .btn-modifier:hover {
+      background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+      color: white;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 4rem;
+      color: var(--secondary);
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .no-data i {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: #e2e8f0;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-nav {
+      border-radius: 12px;
+      padding: 0.9rem 1.8rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-content {
+      border-radius: 20px;
+      border: none;
+      box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--success) 0%, #1e7e34 100%);
+      border-radius: 20px 20px 0 0;
+      color: white;
+      padding: 1.8rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      padding: 1.5rem;
+    }
+
+    .info-item {
+      padding: 1.2rem;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+
+    .info-item:hover {
+      background: #e9ecef;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: var(--secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-weight: 700;
+      color: #2d3748;
+      font-size: 1.1rem;
+    }
+
+    .inactive-patient {
+      opacity: 0.7;
+      background: #f8f9fa;
+      border-right: 4px solid var(--secondary);
+    }
+
+    @media (max-width: 768px) {
+      .patient-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+      }
+      
+      .patient-main-info {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: right;
+      }
+      
+      .donor-table {
+        font-size: 0.85rem;
+      }
+      
+      .dashboard-header {
+        padding: 1.8rem;
+      }
+      
+      .patient-card {
+        padding: 1.5rem;
+      }
+      
+      .nav-buttons {
+        flex-direction: column;
+      }
+      
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-fluid">
+    <!-- Navigation -->
+    <div class="nav-buttons">
+      <a href="{% url 'blood_dashboard' %}" class="btn btn-primary btn-nav">
+        <i class="fas fa-tint"></i> لوحة المتبرعين
+      </a>
+      <a href="{% url 'donation_history' %}" class="btn btn-info btn-nav">
+        <i class="fas fa-history"></i> سجل التبرعات
+      </a>
+      <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary btn-nav">
+        <i class="fas fa-tachometer-alt"></i> لوحة التحكم الرئيسية
+      </a>
+    </div>
+
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="display-5 fw-bold text-dark mb-3">
+            <i class="fas fa-user-injured text-danger me-3"></i>
+            إدارة المرضى ومتابعة التبرع
+          </h1>
+          <p class="text-muted mb-0">متابعة حالات المرضى والمتبرعين المتوافقين</p>
+        </div>
+        <div class="col-md-4">
+          <div class="row text-center">
+            <div class="col-12">
+              <div class="stats-card">
+                <div class="stats-number">{{ data|length }}</div>
+                <div class="stats-label">إجمالي المرضى النشطين</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        {% for item in data %}
+          {% if item.patient.is_active %}
+            <!-- Active Patient Card -->
+            <div class="patient-card">
+              <!-- Patient Header -->
+              <div class="patient-header">
+                <div class="patient-main-info">
+                  <div class="patient-avatar">
+                    {{ item.patient.First_name|first }}{{ item.patient.Family_name|first }}
+                  </div>
+                  <div>
+                    <div class="patient-name" 
+                         data-bs-toggle="modal" 
+                         data-bs-target="#patientModal"
+                         data-name="{{ item.patient.First_name }} {{ item.patient.Family_name }}"
+                         data-gender="{{ item.patient.get_gender_display }}"
+                         data-age="{% if item.patient.age %}{{ item.patient.age }} سنة{% else %}غير محدد{% endif %}"
+                         data-phone="{{ item.patient.phone|default:'غير محدد' }}"
+                         data-blood="{{ item.patient.blood_type }}"
+                         data-hospital="{{ item.patient.hospital_name|default:'غير محدد' }}"
+                         data-address="{{ item.patient.adress|default:'غير محدد' }}">
+                      {{ item.patient.First_name }} {{ item.patient.Family_name }}
+                    </div>
+                    <div class="patient-meta">
+                      <span><i class="fas fa-phone me-1"></i> {{ item.patient.phone|default:"لا يوجد" }}</span>
+                      <span><i class="fas fa-hospital me-1"></i> {{ item.patient.hospital_name|default:"غير محدد" }}</span>
+                      <span><i class="fas fa-birthday-cake me-1"></i> {% if item.patient.age %}{{ item.patient.age }} سنة{% else %}غير محدد{% endif %}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="badge-blood">{{ item.patient.blood_type }}</span>
+                  <div class="d-flex gap-2">
+                    <a href="{% url 'modifier_patient' item.patient.id %}" class="btn btn-modifier btn-action">
+                      <i class="fas fa-edit"></i> تعديل
+                    </a>
+                    <a href="{% url 'delete_patient' item.patient.id %}" class="btn btn-reject btn-action">
+                      <i class="fas fa-times"></i> حذف
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Compatible Donors -->
+              <div class="donor-section">
+                <h6 class="fw-bold mb-3">
+                  <i class="fas fa-users me-2"></i>
+                  المتبرعون المتوافقون
+                </h6>
+                
+                {% if item.donors %}
+                  <div class="table-responsive">
+                    <table class="donor-table">
+                      <thead>
+                        <tr>
+                          <th>الاسم</th>
+                          <th>رقم الهاتف</th>
+                          <th>العنوان</th>
+                          <th>تاريخ آخر تبرع</th>
+                          <th>الإجراءات</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for d in item.donors %}
+                        <tr>
+                          <td>{{ d.PRENOM }} {{ d.NOM }}</td>
+                          <td>{{ d.NUM_TEL|default:"-" }}</td>
+                          <td>{{ d.RESIDENC|default:"-" }}</td>
+                          <td>{{ d.DATE_DERNIER_DON|default:"لم يتبرع من قبل" }}</td>
+                          <td>
+                            <div class="d-flex gap-2 justify-content-center">
+                              <a href="{% url 'generate_certificate' item.patient.id d.id %}" class="btn btn-pdf btn-action">
+                                <i class="fas fa-download"></i> تحميل الشهادة
+                              </a>
+                              <a href="{% url 'donate_blood' item.patient.id d.id%}" class="btn btn-receive btn-action">
+                                <i class="fas fa-hand-holding-heart"></i> تسليم الدم
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                {% else %}
+                  <div class="no-data">
+                    <i class="fas fa-user-slash fa-3x mb-3"></i>
+                    <h5 class="text-muted">لا يوجد متبرعون متوافقون</h5>
+                    <p class="text-muted">لا توجد تطابقات للزمرة الدموية {{ item.patient.blood_type }} حالياً</p>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% empty %}
+          <div class="no-data">
+            <i class="fas fa-user-injured fa-3x mb-3"></i>
+            <h4 class="text-muted">لا توجد بيانات مرضى</h4>
+            <p class="text-muted">لم يتم تسجيل أي مرضى في النظام بعد</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Patient Details Modal -->
+  <div class="modal fade" id="patientModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-user-circle me-2"></i> معلومات المريض
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">الاسم الكامل</div>
+              <div class="info-value" id="modalName"></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">الجنس</div>
+              <div class="info-value" id="modalGender"></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">العمر</div>
+              <div class="info-value" id="modalAge"></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">زمرة الدم</div>
+              <div class="info-value" id="modalBlood"></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">المستشفى</div>
+              <div class="info-value" id="modalHospital"></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">رقم الهاتف</div>
+              <div class="info-value" id="modalPhone"></div>
+            </div>
+            <div class="info-item" style="grid-column: 1 / -1;">
+              <div class="info-label">العنوان</div>
+              <div class="info-value" id="modalAddress"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Patient Modal
+    const patientModal = document.getElementById('patientModal');
+    if (patientModal) {
+        patientModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            document.getElementById('modalName').textContent = button.getAttribute('data-name');
+            document.getElementById('modalGender').textContent = button.getAttribute('data-gender');
+            document.getElementById('modalAge').textContent = button.getAttribute('data-age');
+            document.getElementById('modalPhone').textContent = button.getAttribute('data-phone');
+            document.getElementById('modalBlood').textContent = button.getAttribute('data-blood');
+            document.getElementById('modalHospital').textContent = button.getAttribute('data-hospital');
+            document.getElementById('modalAddress').textContent = button.getAttribute('data-address');
+        });
+    }
+
+    function showAlert(type, message) {
+        const existingAlerts = document.querySelectorAll('.custom-alert');
+        existingAlerts.forEach(alert => alert.remove());
+        
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert ${alertClass} alert-dismissible fade show custom-alert position-fixed`;
+        alertDiv.style.cssText = 'top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; min-width: 400px; text-align: center;';
+        alertDiv.innerHTML = `
+            <i class="fas ${icon} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(alertDiv);
+        setTimeout(() => alertDiv.remove(), 5000);
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+  </script>
+</body>
+</html>

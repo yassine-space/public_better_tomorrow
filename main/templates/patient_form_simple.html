@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج طلب الدم - جمعية الغد أفضل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.8;
+            color: #1a1a1a;
+            direction: rtl;
+            text-align: right;
+            background: #f5f5f5;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 50%, #a04000 100%);
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 20px rgba(230, 126, 34, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            flex-direction: row-reverse;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-direction: row-reverse;
+        }
+
+        .logo-section img {
+            height: 70px;
+            width: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo-section h1 {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .logo-section h1 span {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-direction: row-reverse;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 0.7rem 1.3rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .menu-toggle span {
+            width: 30px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Form Section */
+        .form-section {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .urgent-notice {
+            background: linear-gradient(135deg, #fff5f0 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border-right: 4px solid #e67e22;
+            text-align: center;
+        }
+
+        .urgent-notice .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .urgent-notice h3 {
+            color: #e67e22;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .urgent-notice p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .patient-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(230, 126, 34, 0.15);
+            border: 3px solid transparent;
+            transition: all 0.4s ease;
+        }
+
+        .patient-form:hover {
+            box-shadow: 0 20px 60px rgba(230, 126, 34, 0.2);
+            border-color: #e67e22;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e67e22;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .urgency-level {
+            background: linear-gradient(135deg, #fff5f0 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border-right: 4px solid #e67e22;
+        }
+
+        .urgency-level h3 {
+            color: #e67e22;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .urgency-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .urgency-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .urgency-option:hover {
+            border-color: #e67e22;
+            transform: translateX(-5px);
+        }
+
+        .urgency-option input[type="radio"] {
+            width: auto;
+            margin-left: 1rem;
+            cursor: pointer;
+        }
+
+        .urgency-option.critical {
+            border-color: #e74c3c;
+        }
+
+        .urgency-option.urgent {
+            border-color: #e67e22;
+        }
+
+        .urgency-option.normal {
+            border-color: #3498db;
+        }
+
+        .urgency-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .critical .urgency-badge {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .urgent .urgency-badge {
+            background: #e67e22;
+            color: white;
+        }
+
+        .normal .urgency-badge {
+            background: #3498db;
+            color: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.3rem;
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.3);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(230, 126, 34, 0.5);
+            background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #fff5f0 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            text-align: center;
+            border: 2px solid #e67e22;
+        }
+
+        .contact-info h3 {
+            color: #e67e22;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .contact-info p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+
+        footer p {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: row-reverse;
+                justify-content: space-between;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            nav {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                left: 0;
+                background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            }
+
+            nav.active {
+                max-height: 300px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+                text-align: center;
+                padding: 1rem 0;
+            }
+
+            nav ul li {
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            nav ul li:last-child {
+                border-bottom: none;
+            }
+
+            nav a {
+                display: block;
+                padding: 1rem;
+            }
+
+            .logo-section h1 {
+                font-size: 1.1rem;
+            }
+
+            .logo-section h1 span {
+                font-size: 0.9rem;
+            }
+
+            .form-title {
+                font-size: 2rem;
+            }
+
+            .patient-form {
+                padding: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-section {
+                padding: 0 1rem;
+            }
+
+            .patient-form {
+                padding: 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.8rem;
+            }
+
+            .urgent-notice {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head> 
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="navMenu">
+                <ul>
+                    <li><a href={% url 'home' %}>الرئيسية</a></li>
+                    <li><a href="#about">من نحن</a></li>
+                    <li><a href="#services">خدماتنا</a></li>
+                    <li><a href="#contact">اتصل بنا</a></li>
+                </ul>
+            </nav>
+            <div class="logo-section">
+                <h1>جمعية الغد الافضل<br><span>المكتب البلدي حمام بوغرارة</span></h1>
+                <img src="/static/images/logo.jpg" alt="شعار الجمعية">
+              </div>
+          </div>
+      </header>
+  
+      <!-- Form Section -->
+      <section class="form-section">
+          <h2 class="form-title">طلب دم عاجل</h2>
+          <p class="form-subtitle">نحن هنا لمساعدتك في الحصول على الدم الذي تحتاجه. املأ النموذج وسنتواصل معك في أقرب وقت</p>
+          
+          <!-- Success Message (hidden by default) -->
+          {% if not form.errors %}
+          <div class="success-message" id="successMessage" style="display: {% if form_submitted %}block{% else %}none{% endif %};">
+              <h3>✅ تم إرسال طلبك بنجاح!</h3>
+              <p>سنقوم بالتواصل معك في أقرب وقت ممكن</p>
+          </div>
+          {% endif %}
+  
+          <!-- Error Message -->
+          {% if error %}
+          <div class="urgent-notice" style="background: #fff5f5; border-color: #e74c3c;">
+              <div class="icon">⚠️</div>
+              <h3 style="color: #e74c3c;">خطأ في الإرسال</h3>
+              <p>{{ error }}</p>
+          </div>
+          {% endif %}
+  
+          <div class="urgent-notice">
+              <div class="icon">❤️</div>
+              <h3>طلبك مهم بالنسبة لنا</h3>
+              <p>سنبذل قصارى جهدنا للعثور على متبرع مناسب في أسرع وقت ممكن</p>
+          </div>
+  
+          <form class="patient-form" id="patientForm" method="POST" novalidate>
+              {% csrf_token %}
+              
+              <!-- Display form non-field errors -->
+              {% if form.non_field_errors %}
+              <div class="error-message">
+                  {% for error in form.non_field_errors %}
+                  <p>{{ error }}</p>
+                  {% endfor %}
+              </div>
+              {% endif %}
+  
+              <div class="form-row">
+                  <div class="form-group">
+                      <label for="id_First_name">الاسم الأول *</label>
+                      {{ form.First_name }}
+                      {% if form.First_name.errors %}
+                      <div class="error-message">
+                          {% for error in form.First_name.errors %}
+                          <p>{{ error }}</p>
+                          {% endfor %}
+                      </div>
+                      {% endif %}
+                  </div>
+                  <div class="form-group">
+                      <label for="id_Family_name">الاسم العائلي *</label>
+                      {{ form.Family_name }}
+                      {% if form.Family_name.errors %}
+                      <div class="error-message">
+                          {% for error in form.Family_name.errors %}
+                          <p>{{ error }}</p>
+                          {% endfor %}
+                      </div>
+                      {% endif %}
+                  </div>
+              </div>
+              
+              <div class="form-row">
+                  <div class="form-group">
+                      <label for="id_date_of_birth">تاريخ الميلاد</label>
+                      {{ form.date_of_birth }}
+                      {% if form.date_of_birth.errors %}
+                      <div class="error-message">
+                          {% for error in form.date_of_birth.errors %}
+                          <p>{{ error }}</p>
+                          {% endfor %}
+                      </div>
+                      {% endif %}
+                  </div>
+                  <div class="form-group">
+                      <label for="id_gender">الجنس *</label>
+                      {{ form.gender }}
+                      {% if form.gender.errors %}
+                      <div class="error-message">
+                          {% for error in form.gender.errors %}
+                          <p>{{ error }}</p>
+                          {% endfor %}
+                      </div>
+                      {% endif %}
+                  </div>
+              </div>
+              
+              <div class="form-row">
+                  <div class="form-group">
+                      <label for="id_phone">رقم الهاتف *</label>
+                      {{ form.phone }}
+                      {% if form.phone.errors %}
+                      <div class="error-message">
+                          {% for error in form.phone.errors %}
+                          <p>{{ error }}</p>
+                          {% endfor %}
+                      </div>
+                      {% endif %}
+                  </div>
+                  <div class="form-group">
+                      <label for="id_blood_type">فصيلة الدم المطلوبة *</label>
+                      {{ form.blood_type }}
+                      {% if form.blood_type.errors %}
+                      <div class="error-message">
+                          {% for error in form.blood_type.errors %}
+                          <p>{{ error }}</p>
+                          {% endfor %}
+                      </div>
+                      {% endif %}
+                  </div>
+              </div>
+              
+              <div class="form-group">
+                  <label for="id_hospital_name">المستشفى أو المركز الطبي</label>
+                  {{ form.hospital_name }}
+                  {% if form.hospital_name.errors %}
+                  <div class="error-message">
+                      {% for error in form.hospital_name.errors %}
+                      <p>{{ error }}</p>
+                      {% endfor %}
+                  </div>
+                  {% endif %}
+              </div>
+  
+              <div class="form-group">
+                  <label for="id_adress">العنوان</label>
+                  {{ form.adress }}
+                  {% if form.adress.errors %}
+                  <div class="error-message">
+                      {% for error in form.adress.errors %}
+                      <p>{{ error }}</p>
+                      {% endfor %}
+                  </div>
+                  {% endif %}
+              </div>
+  
+              <div class="form-group">
+                  <label for="id_description">ملاحظات إضافية</label>
+                  {{ form.description }}
+                  <small class="form-text">أي معلومات إضافية قد تساعدنا في خدمتك بشكل أفضل</small>
+                  {% if form.description.errors %}
+                  <div class="error-message">
+                      {% for error in form.description.errors %}
+                      <p>{{ error }}</p>
+                      {% endfor %}
+                  </div>
+                  {% endif %}
+              </div>
+  
+              <button type="submit" class="submit-btn" id="submitBtn">إرسال الطلب</button>
+          </form>
+  
+          <div class="contact-info">
+              <h3>للحالات الطارئة</h3>
+              <p>يمكنك التواصل معنا مباشرة على:<br>
+              <strong>80 44 90 91 07📞 </strong><br>
+              </p>
+          </div>
+      </section>
+        </form>
+
+        
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 جمعية الغد أفضل - المكتب البلدي حمام بوغرارة. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('navMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            nav.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+    
+        // Close menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                const nav = document.getElementById('navMenu');
+                const toggle = document.querySelector('.menu-toggle');
+                nav.classList.remove('active');
+                toggle.classList.remove('active');
+            });
+        });
+    
+        // Add placeholders to form fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('patientForm');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Add placeholders to fields
+            const fields = {
+                'id_First_name': 'أدخل الاسم الأول',
+                'id_Family_name': 'أدخل الاسم العائلي', 
+                'id_phone': 'أدخل رقم الهاتف',
+                'id_hospital_name': 'اسم المستشفى أو المركز الطبي',
+                'id_adress': 'أدخل العنوان الكامل',
+                'id_description': 'أي معلومات إضافية قد تساعدنا...'
+            };
+    
+            Object.keys(fields).forEach(id => {
+                const field = document.getElementById(id);
+                if (field) field.placeholder = fields[id];
+            });
+    
+            // Simple form validation and loading state
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                const requiredFields = form.querySelectorAll('input[required], select[required]');
+                
+                // Check required fields
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.style.borderColor = '#e74c3c';
+                        field.style.backgroundColor = '#fff5f5';
+                    } else {
+                        field.style.borderColor = '';
+                        field.style.backgroundColor = '';
+                    }
+                });
+    
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('يرجى ملء جميع الحقول الإلزامية');
+                    return;
+                }
+    
+                // Show loading state
+                submitBtn.innerHTML = 'جاري الإرسال...';
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.7';
+                
+                // Let the form submit normally - Django will handle it
+                // Remove any previous fetch/AJAX code
+            });
+    
+            // Remove error styling when user starts typing
+            form.querySelectorAll('input, select, textarea').forEach(field => {
+                field.addEventListener('input', function() {
+                    this.style.borderColor = '';
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

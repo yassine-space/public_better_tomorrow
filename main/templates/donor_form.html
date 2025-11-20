@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج التبرع بالدم - جمعية الغد أفضل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.8;
+            color: #1a1a1a;
+            direction: rtl;
+            text-align: right;
+            background: #f5f5f5;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #8e2e2e 100%);
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            flex-direction: row-reverse;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-direction: row-reverse;
+        }
+
+        .logo-section img {
+            height: 70px;
+            width: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo-section h1 {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .logo-section h1 span {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-direction: row-reverse;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 0.7rem 1.3rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .menu-toggle span {
+            width: 30px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Form Section */
+        .form-section {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .donor-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(231, 76, 60, 0.15);
+            border: 3px solid transparent;
+            transition: all 0.4s ease;
+        }
+
+        .donor-form:hover {
+            box-shadow: 0 20px 60px rgba(231, 76, 60, 0.2);
+            border-color: #e74c3c;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e74c3c;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        /* Error styles */
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: #e74c3c;
+            background-color: #fff5f5;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .donation-question {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border-right: 4px solid #e74c3c;
+        }
+
+        .donation-question h3 {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .last-donation-field {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e0e0e0;
+            display: none;
+        }
+
+        .last-donation-field.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-requirements {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border-right: 4px solid #e74c3c;
+        }
+
+        .form-requirements h3 {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .form-requirements ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .form-requirements li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-right: 1.5rem;
+        }
+
+        .form-requirements li:before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            position: absolute;
+            right: 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.3rem;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.5);
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+
+        footer p {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: row-reverse;
+                justify-content: space-between;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            nav {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                left: 0;
+                background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            }
+
+            nav.active {
+                max-height: 300px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+                text-align: center;
+                padding: 1rem 0;
+            }
+
+            nav ul li {
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            nav ul li:last-child {
+                border-bottom: none;
+            }
+
+            nav a {
+                display: block;
+                padding: 1rem;
+            }
+
+            .logo-section h1 {
+                font-size: 1.1rem;
+            }
+
+            .logo-section h1 span {
+                font-size: 0.9rem;
+            }
+
+            .form-title {
+                font-size: 2rem;
+            }
+
+            .donor-form {
+                padding: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-section {
+                padding: 0 1rem;
+            }
+
+            .donor-form {
+                padding: 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="navMenu">
+                <ul>
+                    <li><a href="{% url 'home' %}">الرئيسية</a></li>
+                    <li><a href="#about">من نحن</a></li>
+                    <li><a href="#services">خدماتنا</a></li>
+                    <li><a href="#contact">اتصل بنا</a></li>
+                </ul>
+            </nav>
+            <div class="logo-section">
+                <h1>جمعية الغد الافضل<br><span>المكتب البلدي حمام بوغرارة</span></h1>
+                <img src="/static/images/logo.jpg" alt="شعار الجمعية">
+            </div>
+        </div>
+    </header>
+
+    <!-- Form Section -->
+    <section class="form-section">
+        <h2 class="form-title">نموذج التبرع بالدم</h2>
+        <p class="form-subtitle">هذا النموذج مخصص فقط لسكان بلدية حمام بوغرارة. شكراً لمبادرتك الإنسانية في إنقاذ الأرواح</p>
+        
+        <form class="donor-form" method="POST" id="donorForm">
+            {% csrf_token %}
+            
+            <div class="form-requirements">
+                <h3>شروط التبرع بالدم:</h3>
+                <ul>
+                    <li>أن يكون عمر المتبرع بين 18 و 65 سنة</li>
+                    <li>أن لا يقل وزن المتبرع عن 50 كجم</li>
+                    <li>أن يكون المتبرع بصحة جيدة</li>
+                    <li>سكان بلدية حمام بوغرارة فقط</li>
+                </ul>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" id="firstNameGroup">
+                    <label for="id_PRENOM">الاسم الأول *</label>
+                    <input type="text" id="id_PRENOM" name="PRENOM" placeholder="أدخل الاسم الأول" required>
+                    <div class="error-message" id="firstNameError">يرجى إدخال الاسم الأول</div>
+                </div>
+                <div class="form-group" id="lastNameGroup">
+                    <label for="id_NOM">الاسم العائلي *</label>
+                    <input type="text" id="id_NOM" name="NOM" placeholder="أدخل الاسم العائلي" required>
+                    <div class="error-message" id="lastNameError">يرجى إدخال الاسم العائلي</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group" id="birthDateGroup">
+                    <label for="id_DATE_N">تاريخ الميلاد *</label>
+                    <input type="date" id="id_DATE_N" name="DATE_N" required>
+                    <div class="error-message" id="birthDateError">يرجى إدخال تاريخ الميلاد</div>
+                </div>
+                <div class="form-group" id="genderGroup">
+                    <label for="id_SEX">الجنس *</label>
+                    <select id="id_SEX" name="SEX" required>
+                        <option value="">اختر الجنس</option>
+                        <option value="M">ذكر</option>
+                        <option value="F">أنثى</option>
+                    </select>
+                    <div class="error-message" id="genderError">يرجى اختيار الجنس</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group" id="phoneGroup">
+                    <label for="id_NUM_TEL">رقم الهاتف *</label>
+                    <input type="tel" id="id_NUM_TEL" name="NUM_TEL" placeholder="أدخل رقم الهاتف" required>
+                    <div class="error-message" id="phoneError">يرجى إدخال رقم الهاتف</div>
+                </div>
+                <div class="form-group" id="bloodTypeGroup">
+                    <label for="id_GROUPAGE">فصيلة الدم *</label>
+                    <select id="id_GROUPAGE" name="GROUPAGE" required>
+                        <option value="">اختر فصيلة الدم</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                    <div class="error-message" id="bloodTypeError">يرجى اختيار فصيلة الدم</div>
+                </div>
+            </div>
+            
+            <div class="form-group" id="addressGroup">
+                <label for="id_RESIDENC">العنوان في حمام بوغرارة *</label>
+                <textarea id="id_RESIDENC" name="RESIDENC" rows="3" placeholder="أدخل العنوان" required></textarea>
+                <div class="error-message" id="addressError">يرجى إدخال العنوان</div>
+            </div>
+            
+            <div class="donation-question">
+                <h3>هل تبرعت بالدم من قبل؟ *</h3>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="donated_before" value="yes" onchange="toggleLastDonationField(this)">
+                        نعم
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="donated_before" value="no" onchange="toggleLastDonationField(this)" checked>
+                        لا
+                    </label>
+                </div>
+                        
+                <div class="last-donation-field" id="lastDonationField">
+                    <div class="form-group" id="lastDonationGroup">
+                        <label for="id_DATE_DERNIER_DON">تاريخ آخر تبرع بالدم *</label>
+                        <input type="date" id="id_DATE_DERNIER_DON" name="DATE_DERNIER_DON">
+                        <div class="error-message" id="lastDonationError">يرجى إدخال تاريخ آخر تبرع</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_description">ملاحظات إضافية (اختياري)</label>
+                <textarea id="id_description" name="description" rows="4" placeholder="أي معلومات إضافية قد تساعدنا في خدمتك بشكل أفضل"></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">تسجيل التبرع</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 جمعية الغد أفضل - المكتب البلدي حمام بوغرارة. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('navMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            nav.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                const nav = document.getElementById('navMenu');
+                const toggle = document.querySelector('.menu-toggle');
+                nav.classList.remove('active');
+                toggle.classList.remove('active');
+            });
+        });
+
+        // Toggle last donation date field
+        function toggleLastDonationField(radio) {
+            const lastDonationField = document.getElementById('lastDonationField');
+            const lastDonationInput = document.getElementById('id_DATE_DERNIER_DON');
+            
+            if (radio.value === 'yes') {
+                lastDonationField.classList.add('show');
+                lastDonationInput.value = '';
+            } else {
+                lastDonationField.classList.remove('show');
+                lastDonationInput.value = '2025-01-01';
+            }
+        }
+
+        // Form validation
+        document.getElementById('donorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset error states
+            resetErrors();
+            
+            // Validate required fields
+            let isValid = true;
+            
+            // First name validation
+            const firstName = document.getElementById('id_PRENOM').value.trim();
+            if (!firstName) {
+                showError('firstNameGroup', 'firstNameError', 'يرجى إدخال الاسم الأول');
+                isValid = false;
+            }
+            
+            // Last name validation
+            const lastName = document.getElementById('id_NOM').value.trim();
+            if (!lastName) {
+                showError('lastNameGroup', 'lastNameError', 'يرجى إدخال الاسم العائلي');
+                isValid = false;
+            }
+            
+            // Birth date validation
+            const birthDate = document.getElementById('id_DATE_N').value;
+            if (!birthDate) {
+                showError('birthDateGroup', 'birthDateError', 'يرجى إدخال تاريخ الميلاد');
+                isValid = false;
+            } else {
+                // Age validation
+                const birthDateObj = new Date(birthDate);
+                const today = new Date();
+                let age = today.getFullYear() - birthDateObj.getFullYear();
+                const monthDiff = today.getMonth() - birthDateObj.getMonth();
+                
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+                    age--;
+                }
+                
+                if (age < 18 || age > 65) {
+                    showError('birthDateGroup', 'birthDateError', 'العمر يجب أن يكون بين 18 و 65 سنة');
+                    isValid = false;
+                }
+            }
+            
+            // Gender validation
+            const gender = document.getElementById('id_SEX').value;
+            if (!gender) {
+                showError('genderGroup', 'genderError', 'يرجى اختيار الجنس');
+                isValid = false;
+            }
+            
+            // Phone validation
+            const phone = document.getElementById('id_NUM_TEL').value.trim();
+            if (!phone) {
+                showError('phoneGroup', 'phoneError', 'يرجى إدخال رقم الهاتف');
+                isValid = false;
+            } else if (!/^[\+]?[0-9\s\-\(\)]{8,}$/.test(phone)) {
+                showError('phoneGroup', 'phoneError', 'يرجى إدخال رقم هاتف صحيح');
+                isValid = false;
+            }
+            
+            // Blood type validation
+            const bloodType = document.getElementById('id_GROUPAGE').value;
+            if (!bloodType) {
+                showError('bloodTypeGroup', 'bloodTypeError', 'يرجى اختيار فصيلة الدم');
+                isValid = false;
+            }
+            
+            // Address validation
+            const address = document.getElementById('id_RESIDENC').value.trim();
+            if (!address) {
+                showError('addressGroup', 'addressError', 'يرجى إدخال العنوان');
+                isValid = false;
+            }
+            
+            // Last donation validation
+            const donatedBefore = document.querySelector('input[name="donated_before"]:checked');
+            if (donatedBefore && donatedBefore.value === 'yes') {
+                const lastDonationDate = document.getElementById('id_DATE_DERNIER_DON').value;
+                if (!lastDonationDate) {
+                    showError('lastDonationGroup', 'lastDonationError', 'يرجى إدخال تاريخ آخر تبرع');
+                    isValid = false;
+                }
+            }
+            
+            // If form is valid, submit it
+            if (isValid) {
+                this.submit();
+            } else {
+                // Scroll to the first error
+                const firstError = document.querySelector('.form-group.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        // Helper functions for form validation
+        function showError(groupId, errorId, message) {
+            const group = document.getElementById(groupId);
+            const errorElement = document.getElementById(errorId);
+            
+            group.classList.add('error');
+            errorElement.textContent = message;
+        }
+
+        function resetErrors() {
+            const errorGroups = document.querySelectorAll('.form-group.error');
+            errorGroups.forEach(group => {
+                group.classList.remove('error');
+            });
+        }
+
+        function resetError(groupId) {
+            const group = document.getElementById(groupId);
+            if (group) {
+                group.classList.remove('error');
+            }
+        }
+
+        // Initialize the form - set default date for "No" option
+        document.addEventListener('DOMContentLoaded', function() {
+            const noRadio = document.querySelector('input[name="donated_before"][value="no"]');
+            if (noRadio && noRadio.checked) {
+                document.getElementById('id_DATE_DERNIER_DON').value = '2025-01-01';
+            }
+        });
+
+        // Real-time validation
+        document.getElementById('id_NOM').addEventListener('blur', function() {
+            const lastName = this.value.trim();
+            if (!lastName) {
+                showError('lastNameGroup', 'lastNameError', 'يرجى إدخال الاسم العائلي');
+            } else {
+                resetError('lastNameGroup');
+            }
+        });
+
+        document.getElementById('id_PRENOM').addEventListener('blur', function() {
+            const firstName = this.value.trim();
+            if (!firstName) {
+                showError('firstNameGroup', 'firstNameError', 'يرجى إدخال الاسم الأول');
+            } else {
+                resetError('firstNameGroup');
+            }
+        });
+
+        document.getElementById('id_NUM_TEL').addEventListener('blur', function() {
+            const phone = this.value.trim();
+            if (!phone) {
+                showError('phoneGroup', 'phoneError', 'يرجى إدخال رقم الهاتف');
+            } else if (!/^[\+]?[0-9\s\-\(\)]{8,}$/.test(phone)) {
+                showError('phoneGroup', 'phoneError', 'يرجى إدخال رقم هاتف صحيح');
+            } else {
+                resetError('phoneGroup');
+            }
+        });
+
+        document.getElementById('id_RESIDENC').addEventListener('blur', function() {
+            const address = this.value.trim();
+            if (!address) {
+                showError('addressGroup', 'addressError', 'يرجى إدخال العنوان');
+            } else {
+                resetError('addressGroup');
+            }
+        });
+
+        document.getElementById('id_DATE_DERNIER_DON').addEventListener('blur', function() {
+            const lastDonationDate = this.value;
+            const donatedBefore = document.querySelector('input[name="donated_before"]:checked');
+            
+            if (donatedBefore && donatedBefore.value === 'yes' && !lastDonationDate) {
+                showError('lastDonationGroup', 'lastDonationError', 'يرجى إدخال تاريخ آخر تبرع');
+            } else {
+                resetError('lastDonationGroup');
+            }
+        });
+    </script>
+</body>
+</html>

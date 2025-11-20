@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة الإدارة</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #004af9 0%, #0039c7 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      color: #004af9;
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      background: white;
+    }
+
+    .card svg {
+      width: 70px;
+      height: 70px;
+      margin-bottom: 1.2rem;
+      fill: #004af9;
+      transition: 0.3s;
+    }
+
+    .card:hover svg {
+      fill: #0033a8;
+      transform: scale(1.1);
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .disabled:hover {
+      transform: none;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .logout {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      background: rgba(255,255,255,0.25);
+      padding: 12px 24px;
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logout:hover {
+      background: rgba(255,255,255,0.4);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+      
+      .dashboard-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+      }
+      
+      .card {
+        padding: 1.5rem 1rem;
+        min-height: 190px;
+      }
+      
+      .logout {
+        position: relative;
+        top: 0;
+        left: 0;
+        margin-bottom: 2rem;
+        align-self: flex-start;
+      }
+      
+      body {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="{% url 'logout' %}" class="logout">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+      <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+    </svg>
+    تسجيل الخروج
+  </a>
+
+  <h1>لوحة التحكم الإدارية</h1>
+
+  <div class="dashboard-grid">
+
+    <!-- ✅ Active card (Blood donors) -->
+    <a href="{% url 'blood_dashboard' %}" class="card">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+        <path d="M32 2C32 2 14 26 14 38a18 18 0 0 0 36 0C50 26 32 2 32 2zM32 52a14 14 0 0 1-14-14c0-8 10-23 14-28 4 5 14 20 14 28A14 14 0 0 1 32 52z"/>
+      </svg>
+      <h2>إدارة المتبرعين بالدم</h2>
+      <p>عرض، قبول، ورفض طلبات التبرع بالدم</p>
+    </a>
+
+    <!-- 🩺 Card 2 -->
+    <div class="card disabled">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+        <circle cx="32" cy="20" r="12"/>
+        <path d="M8 58c0-13.255 10.745-24 24-24s24 10.745 24 24"/>
+      </svg>
+      <h2>المرضى</h2>
+      <p>قريباً</p>
+    </div>
+
+    <!-- 📊 Card 3 -->
+    <div class="card disabled">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+        <rect x="10" y="40" width="8" height="14"/>
+        <rect x="28" y="30" width="8" height="24"/>
+        <rect x="46" y="20" width="8" height="34"/>
+      </svg>
+      <h2>التقارير والإحصائيات</h2>
+      <p>قريباً</p>
+    </div>
+
+    <!-- ⚙️ Card 4 -->
+    <div class="card disabled">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="6"/>
+        <path d="M54 36l6 4-4 6-6-2a18 18 0 0 1-4 2l-2 6h-8l-2-6a18 18 0 0 1-4-2l-6 2-4-6 6-4a18 18 0 0 1 0-8l-6-4 4-6 6 2a18 18 0 0 1 4-2l2-6h8l2 6a18 18 0 0 1 4 2l6-2 4 6-6 4a18 18 0 0 1 0 8z"/>
+      </svg>
+      <h2>إعدادات النظام</h2>
+      <p>قريباً</p>
+    </div>
+
+  </div>
+</body>
+</html>
